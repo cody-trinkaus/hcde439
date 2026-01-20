@@ -4,15 +4,82 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+    <title>Assignment 1: Blink!</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 1!</h1>
+    <h1>Assignment 1: Blink!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 1!</p>
+      <img src="IMG_0991.jpg" />
+      <p>
+        Pictured to the left is the schematic for my christmas light extravaganza!
+        Because each light needed to connect to a pin be individually controlable, 
+        I elected to build a parallel circut. I calculated the resistance for red LEDs
+        to be 150ohm and for green LEDs, 100ohm. This informed my choice to use 220ohm 
+        resistors for red LEDs and 100ohm resistors for green LEDs. In theory, any number
+        of LEDs could be in this system, as only one pin will be powered at a time. The
+        same amount of current would be drawn regardless of how many independently blinking 
+        lights are in the system.
+      </p>
+    </div>
+    <div class="header">
+      <img src="IMG_0893.jpg" />
+      <img src="P_FtHM.gif" />
+    </div>
+    <div class="header">
+      <p>
+        To achieve the pattern in the gif, I used the following code. Through experimentation,
+        I found that any blinking interval under 10ms appeared to stay lit up to the human eye.
+      </p>
+    </div>
+    <div class="header">
+      <pre> 
+        // variable to control a time interval for red LED flashing.
+        int timer1 = 100;
+        // variable to control a time interval for green LED flashing.
+        int timer2 = 300; 
+
+        // The setup method initializes each pin as an output. 
+        void setup() {
+          // I used a for loop to initialize each pin.
+          for (int thisPin = 9; thisPin < 14; thisPin++) {
+            pinMode(thisPin, OUTPUT);
+          }
+        }
+
+        // The loop method controlls the LED outputs. 
+        void loop() {
+          // loop through red pins from highest to lowest.
+          for (int thisPin = 9; thisPin < 14; thisPin+=2) {
+            // turn the pin on:
+            digitalWrite(thisPin, HIGH);
+            // leaves the pin on for 100ms.
+            delay(timer1);
+            // turn the pin off:
+            digitalWrite(thisPin, LOW);
+          }
+
+          // loop through green pins from lowest to highest.
+          for (int thisPin = 12; thisPin >= 10; thisPin-=2) {
+            // turn the pin on:
+            digitalWrite(thisPin, HIGH);
+            // leaves the pin on for 300ms.
+            delay(timer2);
+            // turn the pin off:
+            digitalWrite(thisPin, LOW);
+          }
+        } 
+      </pre>
+    </div>
+    <div class="header">
+      <img src="IMG_0992.jpg" />
+      <p>
+        This graph illustrates the change in voltage vs. time in the system.  
+      </p>
+      <p>
+        I did not use AI for any part of this assignment.  
+      </p>
     </div>
   </body>
 </html>
