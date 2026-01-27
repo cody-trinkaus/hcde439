@@ -4,15 +4,94 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+    <title>Assignment 2: Fade!</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 2!</h1>
+    <h1>Assignment 2: Fade!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 2!</p>
+      <img src="FadeSchematic.jpg" />
+      <p>
+        In this assignment, I was tasked with creating a prototype for a new light-up toy. 
+        The schematic to the left shows my process for creating my light-up glasses prototype.
+        First, I thought that since glasses have two arms I would create two push button connections
+        each corresponding to LEDs, so when one or both arms are connected the cooresponding LEDs will 
+        activate. However, I neglected to include a power branch which the switch controlled, futher,
+        my draft did not include plans for a fading LED. <br> <br> The bottom schematic represents my final 
+        response to this assignment. I decided to simplify my approach and include only one push button
+        connection at the source of power. To incorperate a fading LED, I added a separate circut so that
+        when the connection is not made, a red LED will fade, indicating that the system is ready, but the 
+        glasses are not connected. Included in the schematic is the math that informed my resistor use.
+        Since, green LEDs require a resistance of 100 ohm I was able to use a 100 ohm resistor. The red LEDs 
+        required a 220ohm resistor because they need 150 ohm of resistance and 220 ohm was my closest resistor.
+        I used a 10K ohm resistor for my button to create enough resistance so that when the button is not
+        pressed no false HIGHs will be read, but low enough that a 5V charge will not be resisted. <br> <br>
+        If all of the LEDs, which draw about 20mA of current, in my system were all on, 60mA of current would
+        be passing through it. 60mA is below the 200mA maximum Arduino draw limit. If all three LEDs were on,
+        powered by a 1200mAh battery, then they would run for 20 hours (1200mAh/60mA=20h). Instead of the 
+        theoretical value of 2V for a red LED, I found that mine are pulling 1.9V, which is within a reasonable
+        margin of error, perhaps caused by the use of a 220ohm resistor as opposed to the 150ohm min resistance.
+      </p>
+    </div>
+    <div class="header">
+      <video autoplay controls muted> 
+        <source src="Fade.mov" type="video/mp4">
+          transform:rotate(20deg);
+      </video>
+    </div>
+    <div class="header">
+      I achieved the result in the video above using the following code.  
+    </div>
+    <div class="header">
+      <pre>
+        /* The following code is intended to be used with a contact button on sunglasses, so that when contact is made two 
+        green LEDs light up. Otherwise, if the system is powered, but the connection has not been made, a red LED will fade*/
+
+        const int buttonPin = 2; // Constant associated with the button's functionality
+        const int g1 = 3; // Constant associated with a green LED 
+        const int g2 = 9; // Constant associated with the other green LED
+        const int red = 6; // // Constant associated with the red LED
+
+        int brightness = 0;  // how bright the red LED is
+        int fadeAmount = 5;  // how many points to fade the LED by
+        int buttonState = 0; // whether the button is being pressed or not. 0/LOW = no, 1/HIGH = yes.
+
+        // Setup initializes the input and output pins.
+        void setup() {
+          // for loop initializes pins 3, 6, and 9 for output.
+          for (int thisPin = 3; thisPin < 10; thisPin += 3) {
+          pinMode(thisPin, OUTPUT);
+          }
+          pinMode(buttonPin, INPUT); // initializes pin 2 for input.
+        }
+
+        // the loop routine runs over and over again forever:
+        void loop() {
+          buttonState = digitalRead(buttonPin); // reads the state of the button value.
+          // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+          if (buttonState == HIGH) {
+            digitalWrite(red, LOW); // turns off the red LED.
+          } else if (buttonState == LOW) { // check if the button is pressed. If it is, the buttonState is LOW.
+            digitalWrite(g1, LOW); // turn green LED off.
+            digitalWrite(g2, LOW); // turn green LED off.
+            analogWrite(red, brightness); // set the brightness of pin 6.
+
+            brightness = brightness + fadeAmount; // change the brightness for next time through the loop.
+
+          // reverse the direction of the fading at the ends of the fade:
+          if (brightness <= 0 || brightness >= 255) {
+            fadeAmount = -fadeAmount;
+          }
+          // wait for 30 milliseconds to see the dimming effect.
+          delay(30);
+          }     
+        } 
+      </pre>
+    </div>
+    <div class="header">
+      <img src="FadeGraph.jpg" />
+      This graph illustrates the voltage across a green LED if it is analog written with values 255, 128, and 64. 
     </div>
   </body>
 </html>
