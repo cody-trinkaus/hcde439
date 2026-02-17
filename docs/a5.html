@@ -138,34 +138,38 @@
 
 
         FUNCTION motor1_forward():
-            M1A = HIGH, M1B = LOW   
+            M1A = HIGH, M1B = LOW 
+            Delay(10)  
 
         FUNCTION motorA_reverse():
-            M1A = LOW, M1B = HIGH   
+            M1A = LOW, M1B = HIGH
+            Delay(10)   
 
         FUNCTION motorB_forward():
             M2A = HIGH, M2B = LOW
+            Delay(10)
 
         FUNCTION motorB_reverse():
             M2A = LOW, M2B = HIGH
+            Delay(10)
 
         void loop()
           // Phase 1 — Both forward
           motorA_forward()
           motorB_forward()
-          Delay
+          Delay(500)
 
           motorA_reverse()
           motorB_reverse()
-          Delay(2000)
+          Delay(500)
 
           motorA_forward()
           motorB_reverse()
-          Delay(2000)
+          Delay(500)
 
           motorA_reverse()
           motorB_forward()
-          Delay(2000)
+          Delay(500)
       </pre>
     </div>
   </body>
