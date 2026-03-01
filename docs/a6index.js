@@ -1,40 +1,40 @@
-// This should match the baud rate in your Arduino sketch
-const baudRate = 9600; 
-const minD = 10;
-const maxD = 40;
+// Set BAUD Rate
+const baudRate = 9600;
 
-let port, connectBtn; // Declare global variables
+// Declare global variables
+let port, connectBtn;
+
+// Variables to store the joystick position on screen
+let dotX, dotY;
 
 function setup() {
-  setupSerial(); // Run our serial setup function (below)
-
-  // Create a canvas that is the size of our browser window.
-  // windowWidth and windowHeight are p5 variables
+  // Create a canvas the size of browser window
   createCanvas(windowWidth, windowHeight);
+
+  // Run serial setup function
+  setupSerial();
 }
 
 function draw() {
-  const portIsOpen = checkPort(); // Check whether the port is open (see checkPort function below)
+  const portIsOpen = checkPort(); // Check whether the port is open
   if (!portIsOpen) return; // If the port is not open, exit the draw loop
 
   let str = port.readUntil("\n"); // Read from the port until the newline
   if (str.length == 0) return; // If we didn't read anything, return.
-  
+
   let arr = str.trim().split(","); // Trim whitespace and split on commas
 
   // Convert each element to a number and map it to the desired range
-  let x = map(Number(arr[0]), 512, 1023, 0, windowWidth);
-  let y = map(Number(arr[1]), 512, 1023, 0, windowHeight);
-  let diameter = map(Number(arr[2]), 512, 1023, minD, maxD);
+  dotX = map(Number(arr[0]), 0, 1023, 0, width);
+  dotY = map(Number(arr[1]), 0, 1023, 0, height);
 
-  // Draw a circle using our readings
-  circle(x, y, diameter);
+  background(255, 204, 0); // Draw a gold background each frame to clear the previous dot
+  fill(75, 0, 130); // Color the dot purple
+  circle(dotX, dotY, 50); // Draw circle using readings
 }
 
-// Three helper functions for managing the serial connection.
-
 function setupSerial() {
-  port = createSerial();
+  port = createSerial(); // Create a new serial port object
 
   // Check to see if there are any ports we have used previously
   let usedPorts = usedSerialPorts();
@@ -59,7 +59,6 @@ function checkPort() {
   } else {
     // Otherwise we are connected
     connectBtn.html("Disconnect");
-
     return true;
   }
 }
